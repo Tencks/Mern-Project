@@ -6,30 +6,31 @@ import {BasicModal} from '../../../components/Shared'
 import { UserForm, ListUsers } from '../../../components/Admin/Users';
 
 export function Users() {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] =useState(false);
+  const [reload, setreload] = useState('');
 
-  const onOpenCloseModal = () => setShowModal((prevState) => !prevState)
+  const onOpenCloseModal = () => setShowModal((prevState) => !prevState);
 
-  
+  const onReload = () => setreload((prevState) => !prevState)
 
   const panes = [
-    {
-      menuItem:'Usuario Activos',
-      render: () =>(
-        <Tab.Pane attached ={false}>
-          <ListUsers usersActive={true} />
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem:'Usuario Inactivos',
-      render: () => (
-        <Tab.Pane attached ={false}>
-        <ListUsers usersActive={false} />
-       </Tab.Pane>
-      ),
-    },
-  ]
+      {
+          menuItem:'Usuarios activos',
+          render: () => (
+              <Tab.Pane attached={false}>
+                  <ListUsers usersActive ={true} reload={reload} onReload={onReload}/>
+              </Tab.Pane>
+          )
+      },
+      {
+          menuItem:'Usuarios inactivos',
+          render: () => (
+              <Tab.Pane attached={false}>
+                  <ListUsers usersActive ={false} reload={reload} onReload={onReload}/>
+              </Tab.Pane>
+          )
+      },
+  ];
   return (
     <>
     
@@ -45,8 +46,8 @@ export function Users() {
     <Tab menu={{secondary: true}} panes={panes} />
     </div>
 
-    <BasicModal show= {showModal} close={onOpenCloseModal} title='Crear Nuevo Usuario'>
-      <UserForm close ={onOpenCloseModal}/>
+    <BasicModal show= {showModal} close={onOpenCloseModal} title='Crear Nuevo Usuario' >
+      <UserForm close ={onOpenCloseModal}  onReload={onReload}/>
     </BasicModal>
     
     </>

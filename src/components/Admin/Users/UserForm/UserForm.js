@@ -5,28 +5,48 @@ import { useDropzone  } from 'react-dropzone'
 import { image } from '../../../../assets'
 import { useAuth } from '../../../../hooks'
 import { User } from '../../../../api/';
+import { ENV } from '../../../../Utils';
 import { initialValues,validationSchema } from './UserForm.form';
 import './UserForm.scss'
 
 const userController = new User();
+
+
 
 export function UserForm(props) {
     const { close, onReload, user} = props;
     const { accessToken } = useAuth();
 
     const formik = useFormik({
-        initialValues:  initialValues(),
+        initialValues:initialValues(),
         validationSchema: validationSchema(),
-        validateOnChange:false,
-        onSubmit: async (formValue) => {
-            try{
+        validateOnChange: false,
+    onSubmit:async (formValue) => {
+        try {
+            if (!user){
                 await userController.createUser(accessToken, formValue);
-                close();
-            }catch (error){
-                console.error()
+            } else{
+                await userController.updateUser(accessToken, user._id , formValue) 
             }
+            onReload();
+            close();
+        } catch (error) {
+            console.error(error);
         }
-    });
+    }
+})
+
+//PARA ACTUALIZAR EL AVATARRRR
+
+const getAvatar = () => {
+    if (formik.values.fileAvatar){
+        return formik.values.avatar;
+    } else if (formik.values.avatar){
+        return `${ENV.BASE_PATH}/${formik.values.avatar}`
+    }
+    return Image.noAvatar;
+}
+
 
     const onDrop = useCallback((acceptedFiles) =>{
         const file = acceptedFiles[0]
@@ -38,13 +58,6 @@ export function UserForm(props) {
         accept: 'image/jpeg, image/png',
         onDrop,
     })
-
-    const getAvatar = () =>{
-        if(formik.values.fileAvatar){
-           return formik.values.avatar 
-        }
-        return image.noAvatar
-    }
 
   return (
     <Form className='user-form' onSubmit={formik.handleSubmit}>
