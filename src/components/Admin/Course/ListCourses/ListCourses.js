@@ -1,34 +1,47 @@
 import React, {useState, useEffect} from 'react';
-import { Loader } from 'semantic-ui-react';
+import { Loader,Pagination } from 'semantic-ui-react';
 import { size, map } from 'lodash'
 import { Course } from '../../../../api'
-import { CourseItem } from '../CourseItem/CourseItem';
+import { CourseItem } from '../CourseItem';
 import './ListCourses.scss';
 
 
-const courseController = new Course()
+const courseController = new Course();
 
-export function ListCourses() {
+export function ListCourses(props) {
+  const { reload, onReload } = props;
   const [courses, setCourses] = useState(false);
   const [page, setPage] = useState(1)
-  const [pagination,setPagination] = useState()
+  const [pagination,setPagination] = useState(1);
 
   useEffect(() => {
+    let isMounted = true;
     (async () => {
       try {
-        const response = await courseController.getCouses({page, limit: 5})
-        setCourses(response.docs);
+        const response = await courseController.getCourses({page, limit: 5});
+
+        if (isMounted){
+          setCourses(response.course.docs);
+
+        console.log(response.course.docs);
+
         setPagination({
           limit: response.limit,
           page: response.page,
           pages: response.pages,
           total: response.total
-        })
+        });
+        }
+        
       } catch (error) {
         console.error(error);
       }
-    })()
-  }, [page])
+    })();
+    return () => {
+      isMounted = false;
+    };
+
+  }, [page, reload])
 
   const changePage = (_,data) =>{
     setPage(data.activePage)
@@ -40,9 +53,26 @@ export function ListCourses() {
   return (
     <div className='list-courses'>
       
-      {map(courses, (course) => {
+      {/* {map(courses, (course) => {
         <CourseItem key={course._id} course={course} />
-      })}
+      })} */}
+
+
+    {map(courses, (course) => (
+      <CourseItem key={course._id} course={course} onReload={onReload} />
+    ))}
+    
+ 
+
+
+
+
+    
+
+ 
+
+     
+
 
       <div className='list-courses__pagination'>
         <Pagination 

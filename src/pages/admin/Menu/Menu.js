@@ -1,7 +1,7 @@
 import React,  {useState } from 'react'
 import { Tab, Button } from 'semantic-ui-react';
 import './Menu.scss';
-import { ListMenu, MenuForm } from '../../../components/Admin/Menu '
+import { ListMenu, MenuForm } from '../../../components/Admin/Menu'
 import { BasicModal} from '../../../components/Shared'
 
 export function Menu() {

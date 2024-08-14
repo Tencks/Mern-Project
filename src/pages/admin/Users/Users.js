@@ -7,7 +7,7 @@ import { UserForm, ListUsers } from '../../../components/Admin/Users';
 
 export function Users() {
   const [showModal, setShowModal] =useState(false);
-  const [reload, setreload] = useState('');
+  const [reload, setreload] = useState(false);
 
   const onOpenCloseModal = () => setShowModal((prevState) => !prevState);
 

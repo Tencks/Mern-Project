@@ -1,19 +1,39 @@
 import React, { useCallback } from 'react'
 import { Form, Image, } from 'semantic-ui-react';
-import { useDropZone }from 'react-dropzone';
+import { useDropzone }from 'react-dropzone';
 import { useFormik } from 'formik';
 import { initialValues, validationSchema } from './CourseForm.form';
+import { Course } from '../../../../api/';
+import { useAuth } from '../../../../hooks'
+import { ENV } from '../../../../Utils';
 import './Course.Form.scss'
 
-export function CourseForm() {
+export function CourseForm(props) {
+
+  const courseController = new Course();
+  const { accessToken } = useAuth();
+  const { onClose, onReload, course } = props;
 
   const formik = useFormik({
-    initialValues: initialValues(),
+    initialValues: initialValues(course),
     validationSchema: validationSchema(),
     validateOnChange: false,
     onSubmit:async (formValue) => {
       try {
-        console.log(formValue);
+
+        if(!course){
+
+          await courseController.createCourse(accessToken, formValue);
+        }else {
+          await courseController.updateCourse(
+            accessToken,
+            course._id,
+            formValue
+          )
+        }
+
+        onReload();
+        onClose();
       } catch (error) {
         console.error(error);
       }
@@ -26,8 +46,8 @@ export function CourseForm() {
       formik.setFieldValue('file', file)
   })  
 
-  const { getRootProps, getInputProps } = useDropZone({
-    accept: 'iage/jpeg, image/png',
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: 'image/jpeg, image/png',
     onDrop,
   });
 
@@ -35,7 +55,7 @@ export function CourseForm() {
     if(formik.values.file){
       return formik.values.miniature
     }else if(formik.values.miniature){
-      return ''
+      return `${ENV.BASE_PATH}/${formik.values.miniature}`;
     }
     return null;
   }
@@ -96,7 +116,8 @@ export function CourseForm() {
         </Form.Group>
         
         <Form.Button type='submit' primary fluid loading={formik.isSubmitting} >
-          Crear Curso
+          
+          {!course ? 'Crear Curso' : 'Actualizar Curso'}
         </Form.Button>
 
     </Form>

@@ -5,7 +5,7 @@ import { BasicModal } from '../../../Shared'
 import { Menu } from '../../../../api'
 import { MenuForm } from '../MenuForm';
 import { useAuth } from '../../../../hooks';
-import { Menu } from '../../.././api';
+
 
 
 const menuController = new Menu();
@@ -21,7 +21,7 @@ export function MenuItem(props) {
     const [confirmMessage, setConfirmMessage] = useState('');
     const [isDelete, setIsDelete] = useState (false)
 
-    const openCloseModal = () => setShowModal((prevState) => !prevState);
+    const onOpenCloseModal = () => setShowModal((prevState) => !prevState);
     const onOpenCloseConfirm = () => setShowConfirm((prevState) => !prevState)
 
 

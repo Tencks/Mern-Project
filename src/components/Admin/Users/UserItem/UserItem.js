@@ -4,13 +4,18 @@ import './UserItem.scss';
 import { image } from '../../../../assets';
 import { ENV } from '../../../../Utils';
 import { UserForm } from '../UserForm';
-import { BasicModal } from '../../../../Shared';
-import { User } from '../api';
-import { useAuth } from '/hooks'
+import { BasicModal } from '../../../Shared';
+import { User } from '../../../../api';
+import { useAuth } from '../../../../hooks'
 
 export function UserItem(props){
     const { user, onReload } = props;
     const { accessToken }  = useAuth();
+
+
+        console.log('UserItem props:', props);
+
+
 
     const [showModal, setShowModal] = useState(false )
     const [titleModal, setTitleModal] = useState('')
@@ -32,7 +37,7 @@ export function UserItem(props){
 
     const onActivateDesactivate = async () => {
         try {
-            await userController.openUpdateUser( accessToken, user._id, {
+            await userController.updateUser( accessToken, user._id, {
                 active: !user.active
             });
             onReload();
@@ -70,10 +75,12 @@ export function UserItem(props){
         <>
         
         <div className='user-item'>
+
+
             <div className='user-item_info'>
                 <Image avatar src={user.avatar ?  `${ENV.BASE_PATH}/${user.avatar}` : image.noAvatar }/>
             </div>
-            <p>{User.firstname} {user.lastname}</p>
+            <p>{user.firstname} {user.lastname} </p>
             <p>{user.email}</p>
         </div>
 

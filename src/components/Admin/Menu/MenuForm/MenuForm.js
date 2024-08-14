@@ -1,15 +1,18 @@
 import React from 'react';
-import { Form, Dropdown, input} from 'semantic-ui-react';
-import { useFormik } from 'formik ';
+import { Form, Dropdown, Input} from 'semantic-ui-react';
+import { useFormik } from 'formik';
 import { initialValues, validationSchema } from './MenuForm.form';
 import { Menu } from '../../../../api';
+import {  useAuth } from '../../../../hooks';
 
 
 
 
 export function MenuForm( props ) {
     const {onClose, onReload, menu} = props;
-    const { accessToken } = useAuth()
+    const { accessToken } = useAuth();
+
+    const menuController = new Menu();
 
     const formik = useFormik({
         initialValues: initialValues(menu),
@@ -29,6 +32,7 @@ export function MenuForm( props ) {
                     await menuController.updateMenu(accessToken, menu._id, data)
                 }else{
                     await menuController.createMenu(accessToken, data)
+                    
                 }
                 
                 onReload();
@@ -46,7 +50,7 @@ export function MenuForm( props ) {
 
   return (
     <Form onSubmit={formik.handleSubmit}>
-        <Form.group widths='equal'>
+        <Form.Group widths='equal'>
             <Form.Input 
             name='title' 
             placeholder='Titulo'
@@ -62,7 +66,7 @@ export function MenuForm( props ) {
             value={formik.values.order}
             error={formik.errors.order}
             />
-        </Form.group>
+        </Form.Group>
 
         <Input 
         name='path' 
@@ -71,7 +75,7 @@ export function MenuForm( props ) {
         onChange={formik.handleChange}
         value={formik.values.path}
         error={formik.errors.path}
-        label={!menu ? ( <Dropdown options={[]} onChange={(_,data) => formik.setFieldValue('protocol', data.value)} value={formik.values.protocol} error={formik.errors.protocol} /> ) : null}
+        label={!menu ? ( <Dropdown options={options} onChange={(_,data) => formik.setFieldValue('protocol', data.value)} value={formik.values.protocol} error={formik.errors.protocol} /> ) : null}
         />
 
         <Form.Group />

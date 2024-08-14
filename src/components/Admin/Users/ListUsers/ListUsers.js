@@ -31,6 +31,19 @@ export function ListUsers(props) {
     if(!users) return <Loader active inline='centered'/>
     if (size(users) === 0) return 'No hay ningún usuario';
 
+    console.log('Contenido de users:', users);
+
 //   return map(users, (user) => <UserItem key={user._id} user={user}/>);
-return map(users, (user) => <UserItem key={user._id} user={user} onReload={onReload} />);
-}
+// return map(users, (user) => <UserItem key={user._id} user={user} onReload={onReload} />);
+// }
+// return map(users, (user) => {
+//     console.log('Mapeando usuario:', user);
+//     return <UserItem key={user._id} user={user} onReload={onReload} />;
+//   });
+
+return users.response.map((user) => (
+    <UserItem key={user._id} user={user} onReload={onReload} />
+  ));
+    
+
+}  

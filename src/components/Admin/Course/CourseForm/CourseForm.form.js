@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
 
-export function initialValues() {
+export function initialValues(course) {
     return{
-        title:'',
-        miniature:'',
+        title: course?.title || '',
+        miniature: course?.miniature || '',
         file:null,
-        description:'',
-        url:'',
-        price: undefined,
-        score: undefined,
+        description: course?.description || '',
+        url: course?.url || '',
+        price: course?.price || undefined,
+        score: course?.score || undefined,
 
     };
 }
