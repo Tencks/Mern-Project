@@ -14,6 +14,7 @@ export const ENV = {
         COURSES:'courses',
         COURSE:'course',
         NEWSLETTER: 'newsletter',
+        POST:'post',
         },
     JWT:{
         ACCESS:'access',
