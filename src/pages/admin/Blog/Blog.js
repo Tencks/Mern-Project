@@ -18,7 +18,7 @@ const panes = [
   {
     render:() =>(
       <Tab.Pane attached={false}>
-        <ListPost reload={reload} />
+        <ListPost reload={reload} onReload={onReload} />
       </Tab.Pane>
     )
   }

@@ -4,18 +4,32 @@ import { useDropzone } from 'react-dropzone'
 import { Editor } from '@tinymce/tinymce-react'
 import { useFormik } from 'formik'
 import { initialValues, validationSchema } from './PostForm.form'
+import { Post } from '../../../../api'
+import { useAuth } from '../../../../hooks'
+import { ENV } from '../../../../Utils'
 import './PostForm.scss'
 
+const postController = new Post();
 
-export function PostForm() {
+export function PostForm(props) {
+    const { onClose, onReload, post } = props;
+    const { accessToken } = useAuth();
     
     const formik = useFormik({
-        initialValues: initialValues(),
+        initialValues: initialValues(post),
         validationSchema: validationSchema(),
         validateOnChange: false,
         onSubmit: async (formValue) => {
             try {
-                
+                if(post) {
+                    await postController.updatePost(accessToken, post._id, formValue)
+                }else {
+                    
+                    await postController.createPost(accessToken, formValue) 
+                }
+
+               onReload();
+               onClose();
             } catch (error) {
                  console.error(error);
                  
@@ -41,6 +55,8 @@ export function PostForm() {
     const getMiniature = () => {
         if(formik.values.file){
             return formik.values.miniature
+        } else if (formik.values.miniature){
+            return `${ENV.BASE_PATH}/${formik.values.miniature}`
         }
         
         return null
@@ -54,13 +70,20 @@ export function PostForm() {
             name='title' 
             placeholder='Titulo del post' 
             onChange={formik.handleChange}
+            value={formik.values.title}
+            error ={formik.errors.title}
+            />
+            <Form.Input 
+            name='path' 
+            placeholder='Path del post' 
+            onChange={formik.handleChange}
             value={formik.values.path}
             error ={formik.errors.path}
             />
-            <Form.Input name='path' placeholder='Path del post' />
         </Form.Group>
 
         <Editor 
+            apiKey='8u4xlbpgy8b5fbufe6alxdzqw7ymbp8i196zvhzl8whdam1l'
             init={{
                 height:400,
                 menubar:true,
@@ -94,7 +117,7 @@ export function PostForm() {
         </div>
 
         <Form.Button type='submit' primary fluid loading={formik.isSubmitting}>
-            Crear post
+            {post ? 'Actualizar Post' : 'Crear Post'}
         </Form.Button>
 
     </Form>

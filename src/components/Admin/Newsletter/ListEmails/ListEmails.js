@@ -25,9 +25,11 @@ export function ListEmails() {
             setPagination({
               limit: response.limit,
               page:response.page,
-              pages: response.pages,
+              pages: response.totalPages,
               total: response.total,
             });
+            console.log(response);
+            
         } catch (error) {
             console.error(error);
             

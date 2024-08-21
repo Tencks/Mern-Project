@@ -1,11 +1,11 @@
 import * as Yup from 'yup';
 
-export function initialValues(){
+export function initialValues(post){
     return{
-        title:'',
-        path:'',
-        content:'',
-        miniature:'',
+        title: post?.title || '',
+        path:post?.path || '',
+        content: post?.content || '',
+        miniature: post?.miniature || '',
         file:null,
 
     };

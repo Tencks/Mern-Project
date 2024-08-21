@@ -9,28 +9,30 @@ const postController = new Post();
 
 export function ListPost(props) {
 
-const { reload } = props;
+const { reload, onReload } = props;
 
 const [posts, setPosts] = useState(null)
 const [pagination, setPagination] = useState(null);
 const [page, setPage] = useState(1)
 
-console.log(posts);
+
 
 
 useEffect(() => {
   (async () => {
     try {
-      const response = await postController.getPost(page, 2)
-      console.log(response.postStored);
+      const response = await postController.getPost(page)
+      console.log('LINE 25',response.postStored);
       
       setPosts(response.postStored.docs);
       setPagination({
         limit: response.limit,
         page: response.page,
-        pages: response.pages,
+        pages: response.totalPages,
         total: response.total,
       })
+      
+      
     } catch (error) {
       console.error(error);
       
@@ -50,7 +52,7 @@ if (size(posts) === 0) return 'No hay ningún post';
   return (
     <div className='list-post'>
         {map(posts, (post) => (
-          <PostItem key={post._id} post={post} />
+          <PostItem key={post._id} post={post} onReload={onReload} />
         ))}
 
 
