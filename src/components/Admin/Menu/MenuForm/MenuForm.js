@@ -80,7 +80,7 @@ export function MenuForm( props ) {
 
         <Form.Group />
 
-        <Form.Button type='submit' primary fluid>
+        <Form.Button type='submit' primary fluid loading={formik.isSubmitting}> 
             {menu ? 'Actualizar menú' :  'Crear menú'}
         </Form.Button>
     </Form>
