@@ -1,9 +1,12 @@
 import React from 'react'
+import { Banner, HomeCourses } from '../../../components/Web'
 
 export function Home() {
   return (
     <div>
-        <h1>ESTAMOS EN HOME 2</h1>
+        <Banner></Banner>
+
+        <HomeCourses></HomeCourses>
     </div>
   )
 }
