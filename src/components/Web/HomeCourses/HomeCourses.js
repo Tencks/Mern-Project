@@ -48,7 +48,7 @@ export function HomeCourses() {
             </div>
 
             <div className='home-courses__more'>
-                <Button as={Link} to='/courses' primary>
+                <Button as={Link} to='/cursos' primary>
                     Ver más
                 </Button>
             </div>

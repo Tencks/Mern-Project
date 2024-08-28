@@ -14,7 +14,7 @@ export function WebRouter() {
   return (
     <Routes>
         <Route path='/' element={loadLayout(ClientLayout, Home)} />
-        <Route path='/animes' element={loadLayout(ClientLayout, Courses)} />
+        <Route path='/cursos' element={loadLayout(ClientLayout, Courses)} />
         <Route path='/contact' element={loadLayout(ClientLayout, Contact)} />
         <Route path='/blog' element={loadLayout(ClientLayout, Blog)} />
         <Route path='/blog/:path' element={loadLayout(ClientLayout, Post)} />
