@@ -91,10 +91,13 @@ export class Post {
     }
 
 
-    async getPost(page = 1, limit = 10){
+    // async getPost(page = 1, limit = 10){
+    async getPost(params){
         try {
-            const pageFilter= `page=${page}`;
-            const limitFilter = `limit=${limit}`;
+            // const pageFilter= `page=${page}`;
+            // const limitFilter = `limit=${limit}`;
+            const pageFilter = `page=${params?.page || 1}`;
+            const limitFilter = `limit=${params.limit || 10}`;
             const url = `${this.baseApi}/${ENV.API_ROUTES.POST}?${pageFilter}&${limitFilter}`;
 
             const response = await fetch(url);

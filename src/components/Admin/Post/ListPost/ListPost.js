@@ -13,7 +13,7 @@ const { reload, onReload } = props;
 
 const [posts, setPosts] = useState(null)
 const [pagination, setPagination] = useState(null);
-const [page, setPage] = useState(1)
+const [page, setPage] = useState(1);
 
 
 
@@ -21,15 +21,15 @@ const [page, setPage] = useState(1)
 useEffect(() => {
   (async () => {
     try {
-      const response = await postController.getPost(page)
+      const response = await postController.getPost({limit:10})
       console.log('LINE 25',response.postStored);
       
       setPosts(response.postStored.docs);
       setPagination({
-        limit: response.limit,
-        page: response.page,
-        pages: response.totalPages,
-        total: response.total,
+        limit: response.postStored.limit,
+        page: response.postStored.page,
+        pages: response.postStored.totalPages,
+        total: response.postStored.totalDocs,
       })
       
       
@@ -43,8 +43,9 @@ useEffect(() => {
 
 const changePage = (_, data) => {
   setPage(data.activePage)
-  console.log(data, 'uwu')
+  console.log(data, 'ActivePage')
 }
+
 
 if (!posts) return <Loader active inline='centered' />
 if (size(posts) === 0) return 'No hay ningún post';
@@ -63,9 +64,8 @@ if (size(posts) === 0) return 'No hay ningún post';
           ellipsisItem={null}
           firstItem={null}
           lastItem={null}
-          onPageChange={changePage}
-          />
-
+          onPageChange= {changePage}
+        />
           
         </div>
     </div>

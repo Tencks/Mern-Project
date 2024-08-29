@@ -14,23 +14,23 @@ export function Courses() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null)
   
-    
+  const isCurrentLastPage = pagination?.page === pagination?.pages
 
 
   useEffect(() => {
     (async () => {
       try {
         const response = await courseController.getCourses({page, limit: 3});
+        console.log('paginas', response);
+        
         setPagination({
-          page: response.page,
-          pages: response.pages,
+          page: response.course.page,
+          pages: response.course.totalPages,
         })
 
         if(!courses) setCourses(response.course.docs);
-        else setCourses([...courses, ...response.docs])
-
-        setCourses(response.course.docs);
-        console.log(response);
+        else setCourses([...courses, ...response.course.docs])
+        console.log('line 31',courses());
       } catch (error) {
           console.error(error);
           
@@ -59,9 +59,12 @@ export function Courses() {
         ))}
          </div>
 
-      <div className='more'>
-        <Button primary onClick={loadMore}  >Cargar más...</Button>
-      </div>
+        {!isCurrentLastPage && (
+
+        <div className='more'>
+          <Button primary onClick={loadMore}  >Cargar más...</Button>
+        </div>
+        )}
 
     </Container>
   )

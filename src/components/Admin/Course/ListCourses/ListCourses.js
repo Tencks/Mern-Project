@@ -10,15 +10,16 @@ const courseController = new Course();
 
 export function ListCourses(props) {
   const { reload, onReload } = props;
+  
   const [courses, setCourses] = useState(false);
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   const [pagination,setPagination] = useState(1);
 
   useEffect(() => {
     let isMounted = true;
     (async () => {
       try {
-        const response = await courseController.getCourses({page, limit: 5});
+        const response = await courseController.getCourses({page, limit:1});
 
         if (isMounted){
           setCourses(response.course.docs);
@@ -26,10 +27,10 @@ export function ListCourses(props) {
         console.log(response.course.docs);
 
         setPagination({
-          limit: response.limit,
-          page: response.page,
-          pages: response.pages,
-          total: response.total
+          limit: response.course.limit,
+          page: response.course.page,
+          pages: response.course.totalPages,
+          total: response.course.totalDocs
         });
         }
         
@@ -63,17 +64,6 @@ export function ListCourses(props) {
     ))}
     
  
-
-
-
-
-    
-
- 
-
-     
-
-
       <div className='list-courses__pagination'>
         <Pagination 
           totalPages={pagination.pages}
