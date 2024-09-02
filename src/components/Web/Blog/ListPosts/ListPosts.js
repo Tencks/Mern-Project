@@ -3,6 +3,8 @@ import { Post } from '../../../../api';
 import './ListPost.scss';
 import { Loader,Pagination } from 'semantic-ui-react';
 import { map } from 'lodash';
+import { ListPostItem } from '../ListPostItem/ListPostItem';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 
 const postController = new Post();
@@ -10,14 +12,28 @@ const postController = new Post();
 
 export function ListPosts() {
     const [posts, setPosts] = useState(null);
-    console.log(posts);
+    const [pagination, setPagination] = useState();
+
+    const [searchParams] = useSearchParams();
+
+    const [page, setPage] = useState(searchParams.get('page') || 1 );
+
+    const navigate  = useNavigate();
     
+
 
     useEffect(() => {
       ( async () => {
         try {
-            const response =  await postController.getPost(1);
+            const response =  await postController.getPost({page, limit:1} );
             setPosts(response.postStored.docs)
+            setPagination({
+                limit: response.postStored.limit,
+                page: response.postStored.page,
+                pages: response.postStored.totalPages,
+                total: response.postStored.totalDocs,
+              })
+              
         } catch (error) {
             console.error(error);
             
@@ -25,8 +41,16 @@ export function ListPosts() {
       })()
     
      
-    }, [])
+    }, [page])
     
+    const ChangePage = (_, data) => {
+        const newPage = data.activePage;
+        setPage(newPage)
+        navigate(`?page=${newPage}`)
+        
+    }
+
+
     if(!posts) return <Loader active inline = 'centered' />
 
     return (
@@ -34,20 +58,21 @@ export function ListPosts() {
         <div className='list'>
             {map (posts, (post) => (
                 <div key={post._id} className='item'>
-                    <span>{post.title}</span>
+                   <ListPostItem post={post} />
                 </div>
             ))}
         </div>
 
         <div className='pagination'>
             <Pagination 
-            totalPages={10}
-            defaultActivePage={1}
+            totalPages={pagination.pages}
+            defaultActivePage={pagination.page}
             ellipsisItem={null}
             firstItem={null}
             lastItem={null}
             secondary
             pointing
+            onPageChange={ChangePage}
             />
         </div>
 
