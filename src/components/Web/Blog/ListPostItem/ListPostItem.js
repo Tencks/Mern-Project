@@ -13,7 +13,7 @@ export function ListPostItem(props) {
 
 
   return (
-    <Link className='list-post-item' ro={`/blog/${post.path}`}>
+    <Link className='list-post-item' to={`/blog/${post.path}`}>
         <Image src={`${ENV.BASE_PATH}/${post.miniature}`} fluid />
         <h2>{post.title}</h2>
         <span>

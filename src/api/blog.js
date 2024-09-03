@@ -110,4 +110,19 @@ export class Post {
             throw error
         }
     }
+
+    async getPostPath (path) {
+        try {
+            const url = `${this.baseApi}/${ENV.API_ROUTES.POST}/${path}`;
+
+            const response = await fetch(url);
+            const result   = await response.json();
+
+            if(response.status !== 200) throw result
+
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
